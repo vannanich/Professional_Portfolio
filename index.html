@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vanna Nich — Flutter Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg-void:    #090b11;
+      --bg-surface: #0e1118;
+      --bg-card:    #141824;
+      --bg-glass:   rgba(20, 24, 36, 0.6);
+      --accent-a:   #4f6ef7;
+      --accent-b:   #9b5de5;
+      --accent-c:   #00d4ff;
+      --text-hi:    #f0f2ff;
+      --text-lo:    #8892b0;
+      --text-mid:   #ccd6f6;
+      --grad-a:     linear-gradient(135deg, #4f6ef7, #9b5de5);
+      --grad-b:     linear-gradient(135deg, #9b5de5, #00d4ff);
+      --grad-hero:  linear-gradient(135deg, #4f6ef7 0%, #9b5de5 50%, #00d4ff 100%);
+      --border:     rgba(79, 110, 247, 0.18);
+      --shadow-glow: 0 0 40px rgba(79, 110, 247, 0.15);
+      --radius-sm:  8px;
+      --radius-md:  16px;
+      --radius-lg:  24px;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-code:    'JetBrains Mono', monospace;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-void);
+      color: var(--text-hi);
+      font-family: var(--font-display);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg-void); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-a); border-radius: 4px; }
+    ::selection { background: rgba(79,110,247,0.35); color: #fff; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(9, 11, 17, 0.7);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: var(--transition);
+    }
+    .nav-logo {
+      font-family: var(--font-code); font-weight: 700; font-size: 1.1rem;
+      background: var(--grad-a);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: .875rem; font-weight: 500; color: var(--text-lo);
+      letter-spacing: .02em; transition: color var(--transition); position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 2px; background: var(--grad-a);
+      transition: width var(--transition); border-radius: 2px;
+    }
+    .nav-links a:hover { color: var(--text-hi); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      padding: .5rem 1.25rem; border-radius: 999px;
+      border: 1.5px solid var(--accent-a); color: var(--accent-a) !important;
+      font-size: .875rem !important; font-weight: 600 !important;
+      transition: all var(--transition) !important;
+    }
+    .nav-cta:hover { background: var(--accent-a); color: #fff !important; }
+    .nav-cta::after { display: none !important; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-hi); border-radius: 2px; transition: var(--transition); }
+    .mobile-menu {
+      display: none; position: fixed; inset: 64px 0 0 0;
+      background: var(--bg-void); flex-direction: column;
+      align-items: center; justify-content: center; gap: 2.5rem; z-index: 999;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 1.5rem; font-weight: 600; color: var(--text-mid); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 7rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    #hero::before, #hero::after {
+      content: ''; position: absolute; border-radius: 50%;
+      filter: blur(100px); opacity: .45; pointer-events: none;
+    }
+    #hero::before {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #4f6ef7 0%, transparent 70%);
+      top: -100px; left: -200px;
+    }
+    #hero::after {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #9b5de5 0%, transparent 70%);
+      bottom: -100px; right: -150px;
+    }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 4rem; position: relative; z-index: 1;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .35rem 1rem; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--bg-glass);
+      backdrop-filter: blur(12px); font-family: var(--font-code);
+      font-size: .75rem; color: var(--accent-c); margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent-c); box-shadow: 0 0 8px var(--accent-c);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(.8); }
+    }
+    .hero-name {
+      font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700;
+      line-height: 1.1; letter-spacing: -.02em;
+    }
+    .hero-name .highlight {
+      background: var(--grad-hero);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-title {
+      font-family: var(--font-code); font-size: 1.1rem;
+      color: var(--accent-a); margin: .75rem 0 1.25rem; font-weight: 500;
+    }
+    .hero-title span { color: var(--text-lo); }
+    .hero-intro {
+      color: var(--text-lo); font-size: 1.05rem; line-height: 1.75;
+      max-width: 460px; margin-bottom: 2.5rem;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .8rem 1.75rem; border-radius: var(--radius-sm);
+      background: var(--grad-a); color: #fff; font-weight: 600; font-size: .95rem;
+      transition: all var(--transition); box-shadow: 0 4px 20px rgba(79,110,247,.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,110,247,.5); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .8rem 1.75rem; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--bg-glass);
+      backdrop-filter: blur(12px); color: var(--text-mid);
+      font-weight: 600; font-size: .95rem; transition: all var(--transition);
+    }
+    .btn-outline:hover { border-color: var(--accent-a); color: var(--accent-a); transform: translateY(-2px); }
+
+    /* Phone mockup */
+    .hero-visual { display: flex; align-items: center; justify-content: center; position: relative; }
+    .phone-frame {
+      width: 240px; background: var(--bg-card); border-radius: 36px;
+      border: 2px solid var(--border); padding: 12px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.6), var(--shadow-glow);
+      position: relative; z-index: 2; animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    .phone-notch { width: 80px; height: 24px; background: var(--bg-void); border-radius: 0 0 16px 16px; margin: 0 auto 10px; }
+    .phone-screen { background: var(--bg-surface); border-radius: 24px; padding: 1rem; min-height: 360px; overflow: hidden; }
+    .app-status-bar { display: flex; justify-content: space-between; font-size: .6rem; color: var(--text-lo); font-family: var(--font-code); margin-bottom: .75rem; }
+    .app-header { display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem; }
+    .app-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--grad-a); display: flex; align-items: center; justify-content: center; font-size: .75rem; color: #fff; }
+    .app-title-block { flex: 1; }
+    .app-title-block h4 { font-size: .7rem; font-weight: 600; }
+    .app-title-block p { font-size: .55rem; color: var(--text-lo); }
+    .app-card { background: var(--bg-card); border-radius: 12px; padding: .75rem; margin-bottom: .6rem; border: 1px solid var(--border); }
+    .app-card-label { font-size: .55rem; color: var(--text-lo); font-family: var(--font-code); }
+    .app-card-value { font-size: .75rem; font-weight: 600; color: var(--text-hi); margin-top: 2px; }
+    .app-progress-row { display: flex; gap: .5rem; margin-top: .5rem; align-items: center; }
+    .app-progress-bar { height: 4px; border-radius: 2px; background: var(--border); flex: 1; overflow: hidden; }
+    .app-progress-fill { height: 100%; border-radius: 2px; background: var(--grad-a); }
+    .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: .6rem; }
+    .app-mini-card { background: var(--bg-card); border-radius: 10px; padding: .6rem; border: 1px solid var(--border); text-align: center; }
+    .app-mini-card i { font-size: .9rem; margin-bottom: .25rem; display: block; }
+    .app-mini-card p { font-size: .55rem; color: var(--text-lo); }
+    .hero-orb-ring {
+      position: absolute; border-radius: 50%; border: 1px solid var(--border);
+      animation: spin-slow 20s linear infinite;
+    }
+    .hero-orb-ring:nth-child(1) { width: 320px; height: 320px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .hero-orb-ring:nth-child(2) { width: 420px; height: 420px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-direction: reverse; animation-duration: 30s; border-style: dashed; }
+    @keyframes spin-slow { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    /* SECTIONS */
+    section { padding: 6rem 2rem; scroll-margin-top: 64px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow {
+      font-family: var(--font-code); font-size: .75rem; font-weight: 700;
+      letter-spacing: .15em; text-transform: uppercase; color: var(--accent-a);
+      display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem;
+    }
+    .section-eyebrow::after { content: ''; flex: 0 0 40px; height: 1px; background: var(--accent-a); opacity: .5; }
+    .section-heading { font-size: clamp(1.8rem, 4vw, 2.75rem); font-weight: 700; line-height: 1.15; letter-spacing: -.02em; margin-bottom: 1rem; }
+    .section-sub { color: var(--text-lo); max-width: 540px; line-height: 1.75; margin-bottom: 3.5rem; font-size: 1.05rem; }
+
+    /* ABOUT */
+    #about { background: var(--bg-surface); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;   /* both columns start at the top */
+    }
+
+    /* ── Photo wrap: centred horizontally, sticks to top ── */
+    .about-photo-wrap {
+      position: sticky;
+      top: 100px;            /* stays visible below the fixed nav */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 16px 16px 0;
+    }
+    /* decorative gradient tile — sits behind and shifted down-right */
+    .about-photo-bg {
+      position: absolute;
+      width: 320px; height: 380px;
+      border-radius: var(--radius-lg);
+      background: var(--grad-a);
+      opacity: .15;
+      top: 16px; left: 16px;
+      z-index: 0;
+    }
+    /* the actual photo */
+    .about-photo-img {
+      position: relative; z-index: 1;
+      width: 320px; height: 380px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-glow);
+      display: block;
+    }
+
+    .about-points { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2rem; }
+    .about-point {
+      display: flex; gap: 1rem; align-items: flex-start; padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm); background: var(--bg-card);
+      border: 1px solid var(--border); transition: var(--transition);
+    }
+    .about-point:hover { border-color: rgba(79,110,247,.4); }
+    .about-point-icon { flex: 0 0 36px; height: 36px; border-radius: 8px; background: var(--grad-a); display: flex; align-items: center; justify-content: center; color: #fff; font-size: .9rem; }
+    .about-point h4 { font-size: .9rem; font-weight: 600; margin-bottom: .2rem; }
+    .about-point p { font-size: .85rem; color: var(--text-lo); line-height: 1.6; }
+
+    /* SKILLS */
+    #skills { background: var(--bg-void); }
+    .skills-categories { display: flex; flex-direction: column; gap: 2.5rem; }
+    .skill-category-title {
+      font-family: var(--font-code); font-size: .75rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase; color: var(--accent-c);
+      margin-bottom: 1rem; display: flex; align-items: center; gap: .6rem;
+    }
+    .skill-category-title::before { content: '//'; color: var(--text-lo); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+    .skill-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1.25rem 1rem;
+      text-align: center; transition: all var(--transition); cursor: default; position: relative; overflow: hidden;
+    }
+    .skill-card::before { content: ''; position: absolute; inset: 0; background: var(--grad-a); opacity: 0; transition: opacity var(--transition); }
+    .skill-card:hover { border-color: rgba(79,110,247,.5); transform: translateY(-4px); box-shadow: var(--shadow-glow); }
+    .skill-card:hover::before { opacity: .06; }
+    .skill-icon { font-size: 1.75rem; margin-bottom: .6rem; position: relative; z-index: 1; }
+    .skill-name { font-weight: 600; font-size: .85rem; color: var(--text-mid); position: relative; z-index: 1; }
+    .skill-badge {
+      display: inline-block; margin-top: .5rem; padding: .15rem .5rem;
+      border-radius: 999px; font-size: .6rem; font-weight: 700;
+      font-family: var(--font-code); position: relative; z-index: 1;
+    }
+    .badge-primary { background: rgba(79,110,247,.15); color: var(--accent-a); border: 1px solid rgba(79,110,247,.3); }
+    .badge-familiar { background: rgba(0,212,255,.1); color: var(--accent-c); border: 1px solid rgba(0,212,255,.2); }
+
+    /* PROJECTS */
+    #projects { background: var(--bg-surface); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius-md); overflow: hidden; transition: all var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: rgba(79,110,247,.4); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+    .project-thumb { height: 160px; position: relative; overflow: hidden; }
+    .project-thumb-bg { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; }
+    .project-thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--bg-card)); }
+    .project-badge { position: absolute; top: 12px; right: 12px; padding: .25rem .65rem; border-radius: 999px; font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .badge-flutter { background: rgba(79,110,247,.2); color: var(--accent-a); border: 1px solid rgba(79,110,247,.35); }
+    .badge-cpp    { background: rgba(155,93,229,.2); color: var(--accent-b); border: 1px solid rgba(155,93,229,.35); }
+    .badge-java   { background: rgba(255,180,60,.12); color: #ffa94d; border: 1px solid rgba(255,180,60,.3); }
+    .project-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .project-title { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .project-desc { font-size: .875rem; color: var(--text-lo); line-height: 1.65; flex: 1; }
+    .project-techs { display: flex; gap: .4rem; flex-wrap: wrap; margin: 1rem 0; }
+    .tech-tag { padding: .2rem .6rem; border-radius: 999px; background: rgba(79,110,247,.1); border: 1px solid rgba(79,110,247,.25); font-size: .7rem; font-weight: 600; color: var(--accent-a); font-family: var(--font-code); }
+    .project-links { display: flex; gap: .75rem; }
+    .project-link { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .9rem; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 600; transition: all var(--transition); }
+    .project-link.gh { border: 1px solid var(--border); color: var(--text-mid); }
+    .project-link.gh:hover { border-color: var(--accent-a); color: var(--accent-a); }
+
+    /* EXPERIENCE */
+    #experience { background: var(--bg-void); }
+    .timeline { position: relative; padding-left: 2rem; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--accent-a), var(--accent-b), transparent); }
+    .timeline-item { position: relative; padding-bottom: 2.5rem; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -2rem; top: 4px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent-a); border: 2px solid var(--bg-void);
+      box-shadow: 0 0 12px var(--accent-a); transform: translateX(-5px);
+    }
+    .timeline-date { font-family: var(--font-code); font-size: .75rem; color: var(--accent-c); font-weight: 500; margin-bottom: .4rem; }
+    .timeline-title { font-size: 1.1rem; font-weight: 700; margin-bottom: .2rem; }
+    .timeline-org { font-size: .9rem; color: var(--accent-a); font-weight: 500; margin-bottom: .5rem; }
+    .timeline-desc { font-size: .875rem; color: var(--text-lo); line-height: 1.7; }
+    .timeline-ul { list-style: none; padding: 0; margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
+    .timeline-ul li { font-size: .875rem; color: var(--text-lo); line-height: 1.6; display: flex; gap: .6rem; align-items: flex-start; }
+    .timeline-ul li::before { content: '▹'; color: var(--accent-a); font-size: .75rem; margin-top: .15rem; flex-shrink: 0; }
+    .timeline-tags { display: flex; gap: .4rem; flex-wrap: wrap; margin-top: .75rem; }
+    .timeline-tag { padding: .2rem .6rem; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border); font-size: .7rem; color: var(--text-lo); }
+
+    /* CONTACT */
+    #contact { background: var(--bg-surface); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .contact-info-cards { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-info-card {
+      display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm); background: var(--bg-card);
+      border: 1px solid var(--border); transition: var(--transition);
+    }
+    .contact-info-card:hover { border-color: rgba(79,110,247,.4); }
+    .contact-info-card a { color: var(--text-mid); transition: color var(--transition); }
+    .contact-info-card a:hover { color: var(--accent-a); }
+    .contact-info-icon { width: 40px; height: 40px; flex: 0 0 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .ci-blue   { background: rgba(79,110,247,.15); color: var(--accent-a); }
+    .ci-purple { background: rgba(155,93,229,.15); color: var(--accent-b); }
+    .ci-cyan   { background: rgba(0,212,255,.1);   color: var(--accent-c); }
+    .ci-dark   { background: rgba(255,255,255,.06); color: var(--text-mid); }
+    .contact-info-label { font-size: .7rem; color: var(--text-lo); font-family: var(--font-code); margin-bottom: .15rem; }
+    .contact-info-value { font-size: .9rem; font-weight: 500; }
+    .contact-form { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 2rem; }
+    .form-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+    .form-label { font-size: .8rem; font-weight: 600; color: var(--text-lo); }
+    .form-input, .form-textarea {
+      background: var(--bg-surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-hi);
+      font-family: var(--font-display); font-size: .9rem;
+      padding: .7rem 1rem; transition: border-color var(--transition); outline: none; width: 100%;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--accent-a); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-btn {
+      width: 100%; padding: .85rem; border: none; cursor: pointer;
+      border-radius: var(--radius-sm); background: var(--grad-a); color: #fff;
+      font-family: var(--font-display); font-size: .95rem; font-weight: 700;
+      transition: all var(--transition); display: flex; align-items: center; justify-content: center; gap: .5rem;
+      box-shadow: 0 4px 20px rgba(79,110,247,.35);
+    }
+    .form-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,110,247,.5); }
+    #form-msg { text-align: center; margin-top: .75rem; font-size: .85rem; min-height: 1.4em; }
+
+    /* FOOTER */
+    footer { background: var(--bg-void); border-top: 1px solid var(--border); padding: 2.5rem 2rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+    .footer-logo { font-family: var(--font-code); font-weight: 700; font-size: 1.05rem; background: var(--grad-a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .footer-copy { font-size: .85rem; color: var(--text-lo); }
+    .footer-socials { display: flex; gap: .75rem; }
+    .social-btn { width: 38px; height: 38px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: .9rem; color: var(--text-lo); transition: all var(--transition); }
+    .social-btn:hover { border-color: var(--accent-a); color: var(--accent-a); transform: translateY(-2px); }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+      .hero-intro { margin: 0 auto 2rem; }
+      .hero-actions { justify-content: center; }
+      .hero-badge { justify-content: center; display: inline-flex; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .about-photo-wrap { position: relative; top: auto; justify-content: center; padding: 0 0 16px 0; }
+      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 4rem 1.25rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-socials { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">&lt;VannaNich&gt;</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" class="mm-link">About</a>
+  <a href="#skills" class="mm-link">Skills</a>
+  <a href="#projects" class="mm-link">Projects</a>
+  <a href="#experience" class="mm-link">Experience</a>
+  <a href="#contact" class="mm-link">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge reveal"><span class="dot"></span> Available for opportunities</div>
+      <h1 class="hero-name reveal reveal-delay-1">
+        Hi, I'm<br><span class="highlight">Vanna Nich</span>
+      </h1>
+      <p class="hero-title reveal reveal-delay-2"><span></span>Flutter & Mobile Developer</p>
+      <p class="hero-intro reveal reveal-delay-2">
+        Year 3 Software Development student at Norton University, specializing in Flutter & Dart mobile development. Ministry of Post and Telecommunications scholarship recipient with hands-on teaching and mentoring experience.
+      </p>
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href="#projects" class="btn-primary"><i class="fa-solid fa-layer-group"></i> View Projects</a>
+        <a href="#contact" class="btn-outline"><i class="fa-solid fa-paper-plane"></i> Contact Me</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-orb-ring"></div>
+      <div class="hero-orb-ring"></div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="app-status-bar">
+            <span>9:41</span>
+            <span><i class="fa-solid fa-signal"></i> <i class="fa-solid fa-wifi"></i> <i class="fa-solid fa-battery-full"></i></span>
+          </div>
+          <div class="app-header">
+            <div class="app-icon"><i class="fa-brands fa-flutter"></i></div>
+            <div class="app-title-block">
+              <h4>Vanna Nich</h4>
+              <p>Flutter Developer</p>
+            </div>
+          </div>
+          <div class="app-grid">
+            <div class="app-mini-card">
+                <i class="fa-solid fa-mobile-screen" style="color:#4f6ef7"></i>
+                <p>Flutter Dev</p>
+            </div>
+            <div class="app-mini-card">
+                <i class="fa-solid fa-graduation-cap" style="color:#00d4ff"></i>
+                <p>Norton Uni</p>
+            </div>
+            <div class="app-mini-card">
+                <i class="fa-solid fa-chalkboard-user" style="color:#9b5de5"></i>
+                <p>C++ Mentor</p>
+            </div>
+            <div class="app-mini-card">
+                <i class="fa-solid fa-chalkboard-user" style="color:#9b5de5"></i>
+                <p>C++ Instructor</p>
+            </div>
+          </div>
+          <div class="app-mini-card" style="margin-top:.5rem;text-align:center;">
+            <i class="fa-solid fa-award" style="color:#ffa94d"></i>
+            <p>Scholarship</p>
+          </div>
+          <div style="margin-top:.8rem;"></div>
+          <div class="app-card">
+            <div class="app-card-label">PRIMARY SKILL</div>
+            <div class="app-card-value">Flutter & Dart</div>
+            <div class="app-progress-row">
+              <div class="app-progress-bar"><div class="app-progress-fill" style="width:85%"></div></div>
+              <span style="font-size:.55rem;color:#8892b0">Primary</span>
+            </div>
+          </div>
+          <div class="app-card">
+            <div class="app-card-label">UNIVERSITY</div>
+            <div class="app-card-value">Norton University · Software Development</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+
+      <!-- Photo — centred both vertically and horizontally -->
+      <div class="about-photo-wrap reveal">
+        <div class="about-photo-bg"></div>
+        <img
+          src="img/image.png"
+          alt="Vanna Nich"
+          class="about-photo-img"
+        />
+      </div>
+
+      <!-- Text column -->
+      <div>
+        <div class="section-eyebrow reveal">About Me</div>
+        <h2 class="section-heading reveal">Passionate about building mobile apps that matter</h2>
+        <p class="section-sub" style="margin-bottom:1.5rem">
+          I'm Vanna Nich, a Year 3 Software Development student at Norton University and a proud scholarship recipient from the Ministry of Post and Telecommunications. I'm passionate about Flutter mobile development, teaching, and building software that solves real problems.
+        </p>
+        <div class="about-points">
+          <div class="about-point reveal reveal-delay-1">
+            <div class="about-point-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div>
+              <h4>Scholarship Recipient — Ministry of Post & Telecommunications At ANT Technology Traning Center</h4>
+              <p>Awarded a government scholarship by the Ministry of Post and Telecommunications of Cambodia, recognizing outstanding academic performance and dedication to the technology field.</p>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.6rem;">
+                <span style="padding:.2rem .6rem;border-radius:999px;background:rgba(79,110,247,.1);border:1px solid rgba(79,110,247,.25);font-size:.7rem;font-weight:600;color:#4f6ef7;font-family:'JetBrains Mono',monospace;">Government Scholarship</span>
+                <span style="padding:.2rem .6rem;border-radius:999px;background:rgba(79,110,247,.1);border:1px solid rgba(79,110,247,.25);font-size:.7rem;font-weight:600;color:#4f6ef7;font-family:'JetBrains Mono',monospace;">Norton University</span>
+                <span style="padding:.2rem .6rem;border-radius:999px;background:rgba(79,110,247,.1);border:1px solid rgba(79,110,247,.25);font-size:.7rem;font-weight:600;color:#4f6ef7;font-family:'JetBrains Mono',monospace;">Software Development</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-point reveal reveal-delay-2">
+            <div class="about-point-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+            <div>
+              <h4>Flutter & Dart Specialist</h4>
+              <p>My primary focus is building cross-platform mobile apps with Flutter — from UI to state management and API integration.</p>
+            </div>
+          </div>
+          <div class="about-point reveal reveal-delay-3">
+            <div class="about-point-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div>
+              <h4>Experienced Mentor & Instructor</h4>
+              <p>Taught C++ and OOP at both ANT Technology Training Center and Talent4U, developing strong communication and teaching skills alongside my technical work.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Technical Skills</div>
+    <h2 class="section-heading reveal">Tools & Technologies</h2>
+    <p class="section-sub reveal">Skills built through real projects, coursework, and hands-on teaching experience.</p>
+
+    <div class="skills-categories">
+      <div class="reveal">
+        <div class="skill-category-title">Mobile & Tools</div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#54c5f8">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#54c5f8" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.314 0L2.3 12 6 15.7 21.684 0h-7.37zm.014 11.072L7.857 17.53l6.47 6.47H21.7l-6.46-6.468 6.46-6.46h-7.372z"/>
+              </svg>
+            </div>
+            <div class="skill-name">Flutter</div>
+            <span class="skill-badge badge-primary">Primary</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#0175c2">
+              <svg width="28" height="28" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M58.434 221.773L34.79 198.13c-9.167-9.166-9.167-24.046 0-33.212L155.897 43.81c4.583-4.583 10.77-7.157 17.233-7.157h61.03v61.03c0 6.463-2.573 12.65-7.157 17.233L105.896 235.023c-9.166 9.167-24.046 9.167-33.212 0l-14.25-13.25z"/><path d="M58.434 34.638l96.153 96.153-73.2 73.2L34.79 157.344c-9.166-9.166-9.166-24.046 0-33.212L58.434 34.638z" opacity=".5"/></svg>
+            </div>
+            <div class="skill-name">Dart</div>
+            <span class="skill-badge badge-primary">Primary</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#f1502f"><i class="fa-brands fa-git-alt"></i></div>
+            <div class="skill-name">Git & GitHub</div>
+            <span class="skill-badge badge-primary">Confident</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="skill-category-title">Backend</div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#00d4ff"><i class="fa-solid fa-plug"></i></div>
+            <div class="skill-name">RESTful API</div>
+            <span class="skill-badge badge-primary">Python</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#f89820"><i class="fa-brands fa-java"></i></div>
+            <div class="skill-name">Java</div>
+            <span class="skill-badge badge-primary">Intermediate</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#6db33f"><i class="fa-solid fa-leaf"></i></div>
+            <div class="skill-name">Spring Boot</div>
+            <span class="skill-badge badge-familiar">Familiar</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="skill-category-title">Programming Fundamentals</div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#9b5de5"><i class="fa-solid fa-c"></i></div>
+            <div class="skill-name">C / C++</div>
+            <span class="skill-badge badge-primary">Confident</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#4f6ef7"><i class="fa-solid fa-cubes"></i></div>
+            <div class="skill-name">OOP</div>
+            <span class="skill-badge badge-primary">Confident</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="skill-category-title">Familiar With</div>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#e34c26"><i class="fa-brands fa-html5"></i></div>
+            <div class="skill-name">HTML</div>
+            <span class="skill-badge badge-familiar">Basic</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#264de4"><i class="fa-brands fa-css3-alt"></i></div>
+            <div class="skill-name">CSS</div>
+            <span class="skill-badge badge-familiar">Basic</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#38bdf8"><i class="fa-solid fa-wind"></i></div>
+            <div class="skill-name">Tailwind CSS</div>
+            <span class="skill-badge badge-familiar">Basic</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#7952b3"><i class="fa-brands fa-bootstrap"></i></div>
+            <div class="skill-name">Bootstrap</div>
+            <span class="skill-badge badge-familiar">Basic</span>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon" style="color:#f7df1e"><i class="fa-brands fa-js"></i></div>
+            <div class="skill-name">JavaScript</div>
+            <span class="skill-badge badge-familiar">Basic</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Portfolio</div>
+    <h2 class="section-heading reveal">Featured Projects</h2>
+    <p class="section-sub reveal">Applications built through coursework and self-learning, applying real-world development practices.</p>
+    <div class="projects-grid">
+
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-thumb">
+          <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e0e1a,#1a1040)">
+            <i class="fa-solid fa-chalkboard-user" style="color:#9b5de5;opacity:.8"></i>
+          </div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-badge badge-cpp">C++</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Teacher and Student Management System</h3>
+          <p class="project-desc">
+            A console-based C++ application to manage a full school system — 
+            including student and teacher records, quiz control, homework tracking, 
+            teacher attendance, student results, and class schedules — 
+            with file-based persistent storage and OOP architecture.
+          </p>          
+          <div class="project-techs">
+            <span class="tech-tag">C++</span>
+            <span class="tech-tag">File I/O</span>
+            <span class="tech-tag">OOP</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/vannanich/EDU_MASTER_KH_CPP" target="_blank" class="project-link gh"><i class="fa-brands fa-github"></i> GitHub</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="project-card reveal reveal-delay-1">
+        <div class="project-thumb">
+          <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e0e1a,#1a1040); display:flex; align-items:center; justify-content:center; gap:6px;">
+            <i class="fa-solid fa-dumbbell" style="color:#9b5de5; font-size:2rem;"></i>
+            <i class="fa-solid fa-clipboard-list" style="color:#a78bfa; font-size:1.5rem;"></i>
+          </div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-badge badge-cpp">C++</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Gym Management System</h3>
+          <p class="project-desc">
+            A console-based C++ application to manage gym member records — 
+            add, update, delete, and search — with file-based persistent storage 
+            and OOP architecture.
+          </p>
+          <div class="project-techs">
+            <span class="tech-tag">C++</span>
+            <span class="tech-tag">File I/O</span>
+            <span class="tech-tag">OOP</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/vannanich/mini_project_c_plus_plus" target="_blank" class="project-link gh">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="project-card reveal">
+        <div class="project-thumb">
+          <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e1118,#1a1520); display:flex; align-items:center; justify-content:center; gap:6px;">
+            <i class="fa-solid fa-face-smile" style="color:#9b5de5; font-size:2rem;"></i>
+            <i class="fa-solid fa-bolt" style="color:#a78bfa; font-size:1.5rem;"></i>
+          </div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-badge badge-flutter">Flutter</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Smile — Daily Motivation & Task Manager</h3>
+          <p class="project-desc">
+            A Flutter motivation app featuring inspirational video content, 
+            daily quotes, AI-powered chat, and mood-based music — designed 
+            to uplift and energize your day.
+          </p>
+          <div class="project-techs">
+            <span class="tech-tag">Flutter</span>
+            <span class="tech-tag">Dart</span>
+            <span class="tech-tag">SQLite</span>
+            <span class="tech-tag">SharedPreferences </span>
+            <span class="tech-tag">JSON</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/vannanich/todo_list_flutter_withAPI" target="_blank" class="project-link gh">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="project-card reveal">
+        <div class="project-thumb">
+          <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e1118,#1a1520)">
+            <i class="fa-solid fa-list-check" style="color:#9b5de5;opacity:.8"></i>
+          </div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-badge badge-flutter">Flutter</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Smart To-Do App</h3>
+          <p class="project-desc">
+            A Flutter to-do app with task categorization, priority levels, 
+            and due dates — seamlessly synced with a FastAPI backend 
+            for real-time data management.
+          </p>
+          <div class="project-techs">
+            <span class="tech-tag">Flutter</span>
+            <span class="tech-tag">Dart</span>
+            <span class="tech-tag">SQLite</span>
+            <span class="tech-tag">Fast API</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/vannanich/todo_list_flutter_withAPI" target="_blank" class="project-link gh">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+      
+
+
+
+      <div class="project-card reveal">
+        <div class="project-thumb">
+          <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e1118,#1a1520); display:flex; align-items:center; justify-content:center; gap:6px;">
+            <i class="fa-brands fa-python" style="color:#ffd43b; font-size:2rem;"></i>
+            <i class="fa-solid fa-bolt" style="color:#9b5de5; font-size:2rem;"></i>
+          </div>
+          <div class="project-thumb-overlay"></div>
+          <span class="project-badge badge-flutter">Python</span>
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">RESTful CRUD API with FastAPI</h3>
+          <p class="project-desc">
+            A fully functional REST API built with Python & FastAPI, 
+            supporting Create, Read, Update, and Delete operations 
+            with clean endpoint structure.
+          </p>
+          <div class="project-techs">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">FastAPI</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/vannanich/todo_list_flutter_withAPI" target="_blank" class="project-link gh">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+          
+      </div>
+    </div>
+
+
+
+
+      <div class="project-card reveal">
+      <div class="project-thumb">
+        <div class="project-thumb-bg" style="background:linear-gradient(135deg,#0e1118,#1a1520); display:flex; align-items:center; justify-content:center; gap:6px;">
+          <i class="fa-solid fa-face-smile" style="color:#9b5de5; font-size:2rem;"></i>
+          <i class="fa-solid fa-user-doctor" style="color:#a78bfa; font-size:1.5rem;"></i>
+        </div>
+        <div class="project-thumb-overlay"></div>
+        <span class="project-badge badge-flutter">Flutter</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Smile v2 — Motivation & Wellness Platform</h3>
+        <p class="project-desc">
+          An upgraded Flutter motivation platform with doctor-to-user chat for 
+          mental wellness support, social feed for posting videos, images, and 
+          status updates, AI-powered chat, mood-based music, daily quotes, and 
+          inspirational videos — powered by FastAPI backend.
+        </p>
+        <div class="project-techs">
+          <span class="tech-tag">Flutter</span>
+          <span class="tech-tag">Dart</span>
+          <span class="tech-tag">FastAPI</span>
+          <span class="tech-tag">SQLite</span>
+          <span class="tech-tag">SharedPreferences</span>
+          <span class="tech-tag">JSON</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/vannanich/todo_list_flutter_withAPI" target="_blank" class="project-link gh">
+            <i class="fa-brands fa-github"></i> GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE & EDUCATION -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Journey</div>
+    <h2 class="section-heading reveal">Experience & Education</h2>
+    <p class="section-sub reveal">The milestones, roles, and learning experiences that have shaped who I am as a developer.</p>
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <div class="timeline-date">2022 — Present</div>
+        <h3 class="timeline-title">Bachelor of Software Development</h3>
+        <div class="timeline-org">Norton University · Phnom Penh, Cambodia</div>
+        <p class="timeline-desc">Studying core software development principles, OOP, data structures, algorithms, and mobile application development. Currently in Year 3 semester 2.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">OOP</span>
+          <span class="timeline-tag">Data Structures</span>
+          <span class="timeline-tag">Algorithms</span>
+          <span class="timeline-tag">Mobile Dev</span>
+          <span class="timeline-tag">Build Website</span>
+          <span class="timeline-tag">Advance Java</span>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-1">
+        <div class="timeline-date">Scholarship Award</div>
+        <h3 class="timeline-title">Government Scholarship Recipient</h3>
+        <div class="timeline-org">Ministry of Post and Telecommunications · Cambodia</div>
+        <p class="timeline-desc">Awarded a scholarship by the Ministry of Post and Telecommunications, recognizing academic performance and commitment to the technology sector.</p>
+        <div class="timeline-tags">
+          <span class="timeline-tag">Government Scholarship</span>
+          <span class="timeline-tag">Technology</span>
+          <span class="timeline-tag">C++ & OOP</span>
+          <span class="timeline-tag">Flutter Level 1 & 2</span>
+          <span class="timeline-tag">FastAPI</span>
+          <span class="timeline-tag">Real Project Experience</span>
+          <span class="timeline-tag">Team Collaboration</span>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-3">
+        <div class="timeline-date">3 Months</div>
+        <h3 class="timeline-title">Programming Mentor</h3>
+        <div class="timeline-org">ANT Technology Training Center · Phnom Penh, Cambodia</div>
+        <ul class="timeline-ul">
+          <li>Guided students in C++, OOP, and core programming fundamentals</li>
+          <li>Supported coding exercises and projects by breaking down solutions clearly</li>
+          <li>Built strong teaching and technical communication skills</li>
+        </ul>
+        <div class="timeline-tags">
+          <span class="timeline-tag">C++</span>
+          <span class="timeline-tag">OOP</span>
+          <span class="timeline-tag">Mentoring</span>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal reveal-delay-2">
+        <div class="timeline-date">April 2026 — Present</div>
+        <h3 class="timeline-title">Part-time C++ Instructor</h3>
+        <div class="timeline-org">Talent4U · Phnom Penh, Cambodia</div>
+        <ul class="timeline-ul">
+          <li>Delivered C++ lessons and guided students through core programming concepts</li>
+          <li>Provided individual support to help students overcome technical challenges</li>
+        </ul>
+        <div class="timeline-tags">
+          <span class="timeline-tag">C++</span>
+          <span class="timeline-tag">Teaching</span>
+          <span class="timeline-tag">Mentoring</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-eyebrow reveal">Get In Touch</div>
+    <h2 class="section-heading reveal">Let's work<br>together</h2>
+    <p class="section-sub reveal">Open to internships, part-time roles, freelance projects, and collaborations. Feel free to reach out.</p>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-cards">
+          <div class="contact-info-card reveal">
+            <div class="contact-info-icon ci-blue"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <div class="contact-info-label">EMAIL</div>
+              <div class="contact-info-value"><a href="mailto:vannanich2@email.com">vannanich@email.com</a></div>
+            </div>
+          </div>
+          <div class="contact-info-card reveal reveal-delay-1">
+            <div class="contact-info-icon ci-cyan"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <div class="contact-info-label">PHONE</div>
+              <div class="contact-info-value"><a href="tel:+855086589968">+855 12 345 678</a></div>
+            </div>
+          </div>
+          <div class="contact-info-card reveal reveal-delay-2">
+            <div class="contact-info-icon ci-dark"><i class="fa-brands fa-github"></i></div>
+            <div>
+              <div class="contact-info-label">GITHUB</div>
+              <div class="contact-info-value"><a href="https://github.com/vannanich" target="_blank">github.com/nichvanna</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <h3 class="form-title">Send a Message</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input class="form-input" type="text" id="fname" placeholder="Nich" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input class="form-input" type="text" id="lname" placeholder="Vanna" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="email" placeholder="vannanich2@gmail.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input class="form-input" type="text" id="subject" placeholder="Internship opportunity" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" id="message" placeholder="Tell me about the opportunity..."></textarea>
+        </div>
+        <button class="form-btn" onclick="submitForm()">
+          <i class="fa-solid fa-paper-plane"></i> Send Message
+        </button>
+        <p id="form-msg"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">&lt;VannaNich /&gt;</span>
+    <p class="footer-copy">© 2025 Vanna Nich. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="https://github.com/vannanich" target="_blank" class="social-btn" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+      <a href="https://www.instagram.com/_nyc_n/" target="_blank" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      <a href="mailto:vannanich2@email.com" class="social-btn" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const ham = document.getElementById('hamburger');
+  const mm = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => mm.classList.toggle('open'));
+  document.querySelectorAll('.mm-link').forEach(l => l.addEventListener('click', () => mm.classList.remove('open')));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+  document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
+
+  function submitForm() {
+    const fname = document.getElementById('fname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const msg   = document.getElementById('message').value.trim();
+    const status = document.getElementById('form-msg');
+    if (!fname || !email || !msg) {
+      status.style.color = '#ff6b6b';
+      status.textContent = 'Please fill in the required fields.';
+      return;
+    }
+    status.style.color = '#00d4ff';
+    status.textContent = "✓ Message sent! I'll get back to you soon.";
+    ['fname','lname','email','subject','message'].forEach(id => document.getElementById(id).value = '');
+    setTimeout(() => { status.textContent = ''; }, 5000);
+  }
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.boxShadow =
+      window.scrollY > 40 ? '0 8px 32px rgba(0,0,0,.4)' : 'none';
+  });
+</script>
+</body>
+</html>
